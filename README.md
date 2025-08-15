@@ -2,6 +2,17 @@
 
 A comprehensive Python tool for collecting **ALL raw data** from the Fantasy Premier League (FPL) API. This tool fetches complete, unprocessed data including all 101 player attributes, fixtures, teams, and gameweek information - perfect for AI analysis and decision-making.
 
+## Features
+
+- **Complete Data Collection**: All 101 player attributes, fixtures, teams, and gameweeks
+- **Error Handling & Retry Logic**: Automatic retry for failed API calls
+- **Data Validation**: Validates completeness of collected data
+- **Command-Line Arguments**: Flexible control via CLI options
+- **Data Comparison Tool**: Compare data between different collection dates
+- **Verbose Mode**: Detailed output for debugging
+- **Configurable Player Histories**: Choose how many player histories to fetch
+- **Date-Organized Storage**: Automatic organization by collection date
+
 ## 🎯 Purpose
 
 This tool is designed for FPL managers who want to:
@@ -81,33 +92,68 @@ That's it! No complex dependencies needed.
 
 ### Basic Usage
 
-Run the collector:
+Run the collector with options:
 
 ```bash
+# Basic usage
 python fpl_data_collector.py
+
+# With verbose output
+python fpl_data_collector.py -v
+
+# Fetch more player histories (default is 100)
+python fpl_data_collector.py -p 200
+
+# Save to custom directory
+python fpl_data_collector.py -o my_data
+
+# Validate existing data only
+python fpl_data_collector.py --validate-only
 ```
 
-The script will:
+Compare data between dates:
+
+```bash
+# Interactive mode
+python compare_data.py
+
+# Direct comparison
+python compare_data.py 2024-08-15 2024-08-16
+```
+
+The scripts will:
 
 1. Connect to the FPL API
 2. Fetch all available data (takes ~30 seconds)
-3. Save data in three formats in the `data/` folder
+3. Save data in date-organized folders: `data/yyyy-mm-dd/`
+4. Validate data completeness
+5. Generate validation report
 
 ## 📁 Output Files
 
-The collector generates three files with timestamp (e.g., `20240815_143022`):
+The collector creates a folder with today's date (e.g., `data/2024-08-15/`) and saves three files with timestamps:
 
-### 1. `fpl_data_TIMESTAMP.json`
+### Example Output Structure:
+```
+data/
+├── 2024-08-15/
+│   ├── fpl_data_143022.json      # Complete JSON data
+│   ├── fpl_players_143022.csv    # All players in CSV
+│   └── fpl_report_143022.txt     # Human-readable report
+├── 2024-08-16/
+│   ├── fpl_data_091530.json
+│   ├── fpl_players_091530.csv
+│   └── fpl_report_091530.txt
+└── 2024-08-17/
+    └── ...
+```
 
-Complete JSON dump with all raw data from the API. Perfect for programmatic analysis.
+### File Contents:
 
-### 2. `fpl_players_TIMESTAMP.csv`
-
-CSV file with all 685 players and their 101 attributes. Easy to open in Excel or import to databases.
-
-### 3. `fpl_report_TIMESTAMP.txt`
-
-Human-readable text report with ALL data organized in sections. Ideal for copying to AI assistants.
+1. **`fpl_data_HHMMSS.json`** - Complete JSON dump with all raw data from the API
+2. **`fpl_players_HHMMSS.csv`** - CSV file with all 685 players and their 101 attributes
+3. **`fpl_report_HHMMSS.txt`** - Human-readable text report organized in sections
+4. **`validation_HHMMSS.json`** - Data validation report with completeness checks
 
 ## 🤖 Using with AI (ChatGPT, Claude, etc.)
 
